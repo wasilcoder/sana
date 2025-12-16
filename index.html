@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syed Sana | Educator Profile</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Nastaliq+Urdu:wght@400;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #1e3d34;
+            --gold: #c5a059;
+            --bg-desktop: #f0f2f5;
+            --bg-app: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-desktop);
+            font-family: 'Open Sans', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* --- Main Container --- */
+        .app-frame {
+            width: 100%;
+            max-width: 800px;
+            height: 90vh;
+            background: var(--bg-app);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border-radius: 15px;
+            border: 1px solid #dcdcdc; 
+            outline: 4px solid rgba(197, 160, 89, 0.15);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+
+        /* --- Loader Overlay --- */
+        .loader-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: white;
+            z-index: 500;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .loader-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .loading-text {
+            font-family: 'Amiri', serif;
+            color: var(--primary);
+            font-size: 1.2rem;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+
+
+        /* --- Top Bar --- */
+        .lang-bar {
+            background: rgba(255,255,255,0.98);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            z-index: 100;
+        }
+
+        .brand { 
+            font-weight: 800; 
+            color: var(--primary); 
+            font-size: 1.2rem;
+            letter-spacing: 0.5px;
+        }
+
+        .lang-options { display: flex; gap: 12px; }
+
+        .lang-btn {
+            border: 2px solid transparent;
+            background: transparent;
+            padding: 2px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.6;
+        }
+        
+        .lang-btn img {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .lang-btn:hover { opacity: 1; transform: scale(1.1); }
+
+        .lang-btn.active {
+            border-color: var(--gold);
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        /* --- Scrollable Content Area --- */
+        .scroll-container {
+            flex: 1;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .scroll-container::-webkit-scrollbar { width: 6px; }
+        .scroll-container::-webkit-scrollbar-track { background: #f1f1f1; }
+        .scroll-container::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
+
+        /* --- Cover --- */
+        .cover-area {
+            width: 100%;
+            height: 220px;
+            /* New GIF Cover */
+            background-image: url('https://giffiles.alphacoders.com/194/19493.gif');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .cover-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom, rgba(30,61,52,0.1), rgba(255,255,255,1));
+        }
+
+        /* --- Content Styling --- */
+        .content-padding {
+            padding: 0 30px 30px 30px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .profile-pic-wrapper {
+            width: 130px;
+            height: 130px;
+            margin: -65px auto 15px auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .profile-img {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            object-fit: cover;
+        }
+
+        .text-center { text-align: center; }
+
+        h1 { color: var(--primary); font-size: 2rem; margin-bottom: 5px; }
+        .role-text { color: var(--gold); font-weight: 700; margin-bottom: 15px; letter-spacing: 1px; text-transform: uppercase; font-size: 0.9rem; }
+        
+        .bio-text { color: #555; line-height: 1.7; font-size: 1rem; margin-bottom: 25px; }
+
+        /* Tags */
+        .tags-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 15px; }
+        .tag { background: #f0f4f3; color: var(--primary); padding: 8px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; border: 1px solid #e0e0e0; }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--gold);
+            transition: transform 0.2s;
+        }
+        .card:hover { transform: translateY(-2px); }
+
+        .card h3 { color: var(--primary); margin-bottom: 15px; font-size: 1.2rem; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+
+        /* Contact Grid */
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .mini-card {
+            background: #fdfdfd; padding: 20px; border-radius: 10px;
+            text-align: center; text-decoration: none; color: inherit;
+            border: 1px solid #eee; transition: 0.2s;
+        }
+        .mini-card:hover { border-color: var(--gold); background: #fffcf5; }
+        .mini-card i { font-size: 1.5rem; color: var(--gold); margin-bottom: 8px; display: block; }
+        
+        /* Form */
+        .contact-form input, .contact-form textarea {
+            width: 100%; padding: 15px; margin-bottom: 15px;
+            border: 1px solid #ddd; border-radius: 8px; font-family: inherit; background: #fafafa;
+        }
+        .contact-form button {
+            width: 100%; padding: 15px; background: var(--primary); color: white;
+            border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+        .contact-form button:hover { background: var(--gold); }
+
+        /* --- Bottom Nav --- */
+        .bottom-nav {
+            height: 70px;
+            background: white;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .nav-item {
+            background: none; border: none; color: #aaa;
+            font-size: 1.3rem; cursor: pointer;
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            padding: 10px 20px; transition: 0.3s;
+        }
+        .nav-item span { font-size: 0.7rem; font-weight: bold; }
+        .nav-item.active { color: var(--primary); transform: translateY(-3px); }
+
+        /* Visibility */
+        .page-section { display: none; opacity: 0; transform: translateY(10px); transition: opacity 0.4s ease, transform 0.4s ease; }
+        .page-section.active { display: block; opacity: 1; transform: translateY(0); }
+
+        /* RTL */
+        [dir="rtl"] { text-align: right; }
+        [dir="rtl"] .text-center { text-align: center; }
+        [dir="rtl"] .card { border-left: none; border-right: 4px solid var(--gold); }
+        [dir="rtl"] h1, [dir="rtl"] p, [dir="rtl"] h3, [dir="rtl"] .brand { font-family: 'Amiri', serif; }
+        [dir="rtl"].urdu-font { font-family: 'Noto Nastaliq Urdu', serif; }
+        [dir="rtl"].urdu-font h1, [dir="rtl"].urdu-font .brand { line-height: 1.8; }
+        [dir="rtl"].urdu-font p { line-height: 2.2; }
+
+        @media (max-width: 600px) {
+            body { padding: 0; align-items: flex-start; }
+            .app-frame { max-width: 100%; height: 100vh; border-radius: 0; border: none; outline: none; }
+            .contact-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body id="appBody" dir="ltr">
+
+    <div class="app-frame">
+        
+        <div class="loader-overlay" id="loader">
+            <div class="spinner"></div>
+            <div class="loading-text">Loading...</div>
+        </div>
+
+        <div class="lang-bar">
+            <div class="brand" id="headerBrand" data-key="name">Syed Sana</div>
+            <div class="lang-options">
+                <button class="lang-btn active" id="btn-en" onclick="triggerLoad('en')">
+                    <img src="https://flagcdn.com/w80/us.png" alt="English">
+                </button>
+                <button class="lang-btn" id="btn-ar" onclick="triggerLoad('ar')">
+                    <img src="https://flagcdn.com/w80/sa.png" alt="Arabic">
+                </button>
+                <button class="lang-btn" id="btn-ur" onclick="triggerLoad('ur')">
+                    <img src="https://flagcdn.com/w80/pk.png" alt="Urdu">
+                </button>
+            </div>
+        </div>
+
+        <div class="scroll-container" id="scrollContainer">
+            
+            <div class="cover-area">
+                <div class="cover-overlay"></div>
+            </div>
+
+            <div class="content-padding">
+                
+                <div id="home" class="page-section active">
+                    <div class="profile-pic-wrapper">
+                        <img src="https://img.freepik.com/premium-vector/vector-muslim-woman-avatar-female-vector-arab-people-icon-saudi-character-minimalistic-simple-flat_615232-2336.jpg" alt="Syed Sana" class="profile-img">
+                    </div>
+
+                    <div class="text-center">
+                        <h1 data-key="name">Syed Sana</h1>
+                        <div class="role-text" data-key="role">Professional Educator</div>
+                        <p class="bio-text" data-key="bio">Darse Nizami Graduate specializing in Arabic Grammar, Tajweed, and Islamic Jurisprudence. Passionate about teaching the intricacies of the Quran to students worldwide.</p>
+                    
+                        <div class="tags-container">
+                            <span class="tag" data-key="tag1">Darse Nizami</span>
+                            <span class="tag" data-key="tag2">Arabic Expert</span>
+                            <span class="tag" data-key="tag3">Quran Teacher</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="profile" class="page-section">
+                    <h2 class="text-center" style="color:var(--primary); margin-bottom:25px;" data-key="menu_profile">Profile Details</h2>
+
+                    <div class="card">
+                        <h3 data-key="edu_title">Education</h3>
+                        <div style="display:flex; align-items:start; gap:10px;">
+                            <i class="fas fa-university" style="color:var(--gold); margin-top:5px;"></i>
+                            <div>
+                                <strong style="color: #333; display:block; margin-bottom:5px;" data-key="edu_school">Khatijatul Kubra Mardan, KPK</strong>
+                                <span style="font-size:0.9rem; color:#777;" data-key="edu_course">6 Years Darse Nizami Course</span>
+                            </div>
+                        </div>
+                        <p style="font-size:0.9rem; margin-top:15px; color:#666;" data-key="edu_desc">Completed comprehensive studies in Nahw, Sarf, Fiqh, and Tafseer.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3 data-key="serv_title">Services</h3>
+                        <ul style="list-style: none; color:#555; line-height:2;">
+                            <li><i class="fas fa-check" style="color:var(--gold); margin-right:10px; margin-left:10px;"></i> <span data-key="serv1">Teaching Quran with Tajweed</span></li>
+                            <li><i class="fas fa-check" style="color:var(--gold); margin-right:10px; margin-left:10px;"></i> <span data-key="serv2">Arabic Language & Grammar</span></li>
+                            <li><i class="fas fa-check" style="color:var(--gold); margin-right:10px; margin-left:10px;"></i> <span data-key="serv3">Islamic Laws Consultation</span></li>
+                            <li><i class="fas fa-check" style="color:var(--gold); margin-right:10px; margin-left:10px;"></i> <span data-key="serv4">Private Tuition & Mentoring</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="text-center" style="margin-bottom: 20px;">
+                        <h3 style="font-size:1rem; margin-bottom:15px; color:#999;" data-key="cert_label">Certificate Preview</h3>
+                        <img src="https://i.ibb.co/zVKVfXn6/Whats-App-Image-2025-12-16-at-3-53-29-PM.jpg" onclick="window.open(this.src)" style="width:100%; max-width:400px; border-radius:8px; border:4px solid #fff; box-shadow:0 5px 15px rgba(0,0,0,0.1); cursor:pointer; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'" alt="Certificate">
+                    </div>
+                </div>
+
+                <div id="contact" class="page-section">
+                    <h2 class="text-center" style="color:var(--primary); margin-bottom:25px;" data-key="menu_contact">Contact Me</h2>
+
+                    <div class="contact-grid">
+                        <a href="https://wa.me/923101457770" class="mini-card">
+                            <i class="fab fa-whatsapp"></i>
+                            <span>WhatsApp</span>
+                        </a>
+                        <a href="tel:+923101457770" class="mini-card">
+                            <i class="fas fa-phone"></i>
+                            <span data-key="call_btn">Call Now</span>
+                        </a>
+                    </div>
+                    
+                    <div class="mini-card" style="width:100%; margin-bottom:20px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                        <i class="fas fa-map-marker-alt" style="margin-bottom:0;"></i>
+                        <span>618 A Eden City, Lahore</span>
+                    </div>
+
+                    <div class="card" style="border-left:none; border-top: 4px solid var(--gold);">
+                        <h3 data-key="form_title">Send an Email</h3>
+                        <form action="mailto:springdandelion004@gmail.com" method="post" enctype="text/plain" class="contact-form">
+                            <input type="text" name="name" placeholder="Name / الاسم" required>
+                            <input type="text" name="contact" placeholder="Phone or Email / رقم الهاتف" required>
+                            <textarea name="message" rows="4" placeholder="Message / رسالة" required></textarea>
+                            <button type="submit" data-key="form_btn">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <nav class="bottom-nav">
+            <button class="nav-item active" onclick="switchWithLoad('home', this)">
+                <i class="fas fa-home"></i>
+                <span data-key="menu_home">Home</span>
+            </button>
+            <button class="nav-item" onclick="switchWithLoad('profile', this)">
+                <i class="fas fa-user-graduate"></i>
+                <span data-key="menu_profile">Profile</span>
+            </button>
+            <button class="nav-item" onclick="switchWithLoad('contact', this)">
+                <i class="fas fa-envelope"></i>
+                <span data-key="menu_contact">Contact</span>
+            </button>
+        </nav>
+
+    </div>
+
+    <script>
+        // --- Translations ---
+        const translations = {
+            en: {
+                name: "Syed Sana",
+                role: "Professional Educator",
+                bio: "Darse Nizami Graduate specializing in Arabic Grammar, Tajweed, and Islamic Jurisprudence. Passionate about teaching the intricacies of the Quran to students worldwide.",
+                tag1: "Darse Nizami", tag2: "Arabic Expert", tag3: "Quran Teacher",
+                menu_home: "Home", menu_profile: "Profile", menu_contact: "Contact",
+                edu_title: "Education", edu_school: "Khatijatul Kubra Mardan, KPK", edu_course: "6 Years Darse Nizami Course", edu_desc: "Completed comprehensive studies in Nahw, Sarf, Fiqh, and Tafseer.",
+                serv_title: "Services", serv1: "Teaching Quran with Tajweed", serv2: "Arabic Language & Grammar", serv3: "Islamic Laws Consultation", serv4: "Private Tuition & Mentoring",
+                cert_label: "Certificate Preview", form_title: "Send an Email", form_btn: "Send Message", call_btn: "Call Now", load_txt: "Loading..."
+            },
+            ar: {
+                name: "سيدة سناء",
+                role: "معلمة محترفة",
+                bio: "خريجة درس نظامي متخصصة في النحو العربي والتجويد والفقه الإسلامي. شغوفة بتعليم دقائق القرآن للطلاب في جميع أنحاء العالم.",
+                tag1: "درس نظامي", tag2: "خبيرة لغة عربية", tag3: "معلمة قرآن",
+                menu_home: "الرئيسية", menu_profile: "الملف الشخصي", menu_contact: "اتصل بي",
+                edu_title: "التعليم", edu_school: "خديجة الكبرى مردان، خيبر بختونخوا", edu_course: "دورة درس نظامي 6 سنوات", edu_desc: "أكملت دراسات شاملة في النحو والصرف والفقه والتفسير.",
+                serv_title: "الخدمات", serv1: "تعليم القرآن مع التجويد", serv2: "اللغة العربية والقواعد", serv3: "استشارات القوانين الإسلامية", serv4: "دروس خصوصية وتوجيه",
+                cert_label: "معاينة الشهادة", form_title: "إرسال بريد إلكتروني", form_btn: "إرسال الرسالة", call_btn: "اتصل الآن", load_txt: "جاري التحميل..."
+            },
+            ur: {
+                name: "سیدہ ثناء",
+                role: "پیشہ ور معلمہ",
+                bio: "درس نظامی کی گریجویٹ، عربی گرامر، تجوید اور اسلامی فقہ میں مہارت۔ دنیا بھر کے طلباء کو قرآن پاک کی باریکیاں سکھانے کا جذبہ۔",
+                tag1: "درس نظامی", tag2: "عربی ماہر", tag3: "قرآن ٹیچر",
+                menu_home: "ہوم", menu_profile: "پروفائل", menu_contact: "رابطہ",
+                edu_title: "تعلیم", edu_school: "خدیجۃ الکبریٰ مردان، کے پی کے", edu_course: "6 سالہ درس نظامی کورس", edu_desc: "نحو، صرف، فقہ، اور تفسیر میں جامع تعلیم مکمل کی۔",
+                serv_title: "خدمات", serv1: "تجوید کے ساتھ قرآن کی تعلیم", serv2: "عربی زبان اور گرامر", serv3: "اسلامی قوانین (فقہ) مشاورت", serv4: "نجی ٹیوشن اور رہنمائی",
+                cert_label: "سرٹیفکیٹ کا پیش منظر", form_title: "ای میل بھیجیں", form_btn: "پیغام بھیجیں", call_btn: "کال کریں", load_txt: "لوڈ ہو رہا ہے..."
+            }
+        };
+
+        // --- Init: Check LocalStorage on Load ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('selectedLang') || 'en';
+            setLang(savedLang);
+        });
+
+        // --- Loader Logic ---
+        function showLoader(callback) {
+            const loader = document.getElementById('loader');
+            loader.classList.add('active');
+            
+            // Wait 600ms to fake loading
+            setTimeout(() => {
+                callback();
+                setTimeout(() => {
+                    loader.classList.remove('active');
+                }, 200);
+            }, 600);
+        }
+
+        // --- Language Switch ---
+        function triggerLoad(lang) {
+            // Save to LocalStorage
+            localStorage.setItem('selectedLang', lang);
+            
+            showLoader(() => {
+                setLang(lang);
+            });
+        }
+
+        function setLang(lang) {
+            // 1. Update Flag Buttons UI
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            const activeBtn = document.getElementById(`btn-${lang}`);
+            if(activeBtn) activeBtn.classList.add('active');
+
+            // 2. Handle Direction and Font Family
+            const body = document.getElementById('appBody');
+            if (lang === 'ar' || lang === 'ur') {
+                body.setAttribute('dir', 'rtl');
+                if(lang === 'ur') body.classList.add('urdu-font');
+                else body.classList.remove('urdu-font');
+            } else {
+                body.setAttribute('dir', 'ltr');
+                body.classList.remove('urdu-font');
+            }
+
+            // 3. Update All Text Content (Including Header Brand)
+            const elements = document.querySelectorAll('[data-key]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translations[lang][key]) {
+                    el.innerText = translations[lang][key];
+                }
+            });
+            
+            // 4. Update Loading Text
+            const loadingTxt = document.querySelector('.loading-text');
+            if(loadingTxt) loadingTxt.innerText = translations[lang]['load_txt'];
+        }
+
+        // --- Tab Switch ---
+        function switchWithLoad(tabId, btn) {
+            if (!btn.classList.contains('active')) {
+                showLoader(() => {
+                    // Update Nav Icons
+                    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    // Update Page Visibility
+                    document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+                    document.getElementById(tabId).classList.add('active');
+
+                    // Reset Scroll
+                    document.getElementById('scrollContainer').scrollTop = 0;
+                });
+            }
+        }
+
+    </script>
+</body>
+</html>
