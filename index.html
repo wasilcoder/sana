@@ -2,21 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Syed Sana | Educator Profile</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Nastaliq+Urdu:wght@400;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --primary: #1e3d34;
+            --primary: #1e3d34; /* Deep Green */
+            --primary-light: #e8f5e9;
             --gold: #c5a059;
             --bg-desktop: #f0f2f5;
             --bg-app: #ffffff;
+            --text-dark: #2c3e50;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -24,362 +26,411 @@
         body {
             background-color: var(--bg-desktop);
             font-family: 'Open Sans', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        /* --- Main Container --- */
-        .app-frame {
-            width: 100%;
-            max-width: 800px;
-            height: 90vh;
-            background: var(--bg-app);
-            position: relative;
+            height: 100vh;
+            height: 100dvh;
             overflow: hidden;
             display: flex;
-            flex-direction: column;
-            border-radius: 15px;
-            border: 1px solid #dcdcdc; 
-            outline: 4px solid rgba(197, 160, 89, 0.15);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-        }
-
-        /* --- Loader Overlay --- */
-        .loader-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: white;
-            z-index: 500;
-            display: flex;
             justify-content: center;
             align-items: center;
+        }
+
+        /* --- App Container --- */
+        .app-frame {
+            width: 100%;
+            max-width: 500px;
+            height: 100%;
+            background: var(--bg-app);
+            position: relative;
+            display: flex;
             flex-direction: column;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
+            box-shadow: 0 0 30px rgba(0,0,0,0.1);
         }
 
-        .loader-overlay.active {
-            opacity: 1;
-            pointer-events: all;
+        @media (min-width: 501px) {
+            .app-frame {
+                height: 90vh;
+                border-radius: 24px;
+                border: 1px solid #e0e0e0;
+                overflow: hidden;
+            }
         }
 
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid var(--gold);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 15px;
-        }
-
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .loading-text {
-            font-family: 'Amiri', serif;
-            color: var(--primary);
-            font-size: 1.2rem;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
-
-
-        /* --- Top Bar --- */
-        .lang-bar {
+        /* --- Header (Lang Toggle) --- */
+        .header-bar {
+            flex-shrink: 0;
             background: rgba(255,255,255,0.98);
             padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #eee;
-            z-index: 100;
+            border-bottom: 1px solid #f0f0f0;
+            z-index: 10;
         }
 
-        .brand { 
-            font-weight: 800; 
-            color: var(--primary); 
-            font-size: 1.2rem;
+        .brand-name {
+            font-weight: 800;
+            color: var(--primary);
+            font-size: 1.1rem;
+            text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .lang-options { display: flex; gap: 12px; }
-
-        .lang-btn {
-            border: 2px solid transparent;
-            background: transparent;
-            padding: 2px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: 0.2s;
+        .lang-group {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0.6;
+            gap: 8px;
+            background: #f5f5f5;
+            padding: 4px;
+            border-radius: 30px;
         }
-        
-        .lang-btn img {
-            width: 28px;
-            height: 28px;
+
+        .lang-badge {
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            object-fit: cover;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            border: none;
+            background: transparent;
+            color: #666;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.2s;
+            font-family: 'Open Sans', sans-serif;
         }
 
-        .lang-btn:hover { opacity: 1; transform: scale(1.1); }
+        /* Script specific fonts for the badges */
+        .lang-badge.ar { font-family: 'Amiri', serif; font-size: 1rem; padding-bottom: 5px; }
+        .lang-badge.ur { font-family: 'Noto Nastaliq Urdu', serif; font-size: 0.7rem; padding-top: 5px; }
 
-        .lang-btn.active {
-            border-color: var(--gold);
-            opacity: 1;
-            transform: scale(1.1);
+        .lang-badge:hover { background: #e0e0e0; }
+        
+        .lang-badge.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 2px 5px rgba(30,61,52,0.3);
         }
 
-        /* --- Scrollable Content Area --- */
-        .scroll-container {
+        /* --- Scrollable Area --- */
+        .scroll-view {
             flex: 1;
             overflow-y: auto;
-            position: relative;
+            overflow-x: hidden;
+            background: #fff;
+            scroll-behavior: smooth;
         }
-        
-        .scroll-container::-webkit-scrollbar { width: 6px; }
-        .scroll-container::-webkit-scrollbar-track { background: #f1f1f1; }
-        .scroll-container::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
+        .scroll-view::-webkit-scrollbar { width: 0px; }
 
-        /* --- Cover --- */
-        .cover-area {
+        /* Cover & Profile Pic */
+        .cover-img {
             width: 100%;
-            height: 220px;
-            /* New GIF Cover */
+            height: 180px;
             background-image: url('https://giffiles.alphacoders.com/194/19493.gif');
             background-size: cover;
             background-position: center;
             position: relative;
         }
-        
         .cover-overlay {
             position: absolute; inset: 0;
-            background: linear-gradient(to bottom, rgba(30,61,52,0.1), rgba(255,255,255,1));
+            background: linear-gradient(to bottom, transparent, rgba(255,255,255,1));
         }
 
-        /* --- Content Styling --- */
-        .content-padding {
-            padding: 0 30px 30px 30px;
-            max-width: 700px;
-            margin: 0 auto;
+        .profile-wrapper {
+            width: 110px; height: 110px;
+            margin: -55px auto 15px auto;
+            position: relative; z-index: 2;
         }
-
-        .profile-pic-wrapper {
-            width: 130px;
-            height: 130px;
-            margin: -65px auto 15px auto;
-            position: relative;
-            z-index: 2;
-        }
-
         .profile-img {
             width: 100%; height: 100%;
             border-radius: 50%;
-            border: 5px solid white;
+            border: 4px solid white;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             object-fit: cover;
         }
 
+        /* Content Styling */
+        .container { padding: 0 20px 30px 20px; }
         .text-center { text-align: center; }
-
-        h1 { color: var(--primary); font-size: 2rem; margin-bottom: 5px; }
-        .role-text { color: var(--gold); font-weight: 700; margin-bottom: 15px; letter-spacing: 1px; text-transform: uppercase; font-size: 0.9rem; }
         
-        .bio-text { color: #555; line-height: 1.7; font-size: 1rem; margin-bottom: 25px; }
+        h1 { color: var(--primary); font-size: 1.6rem; margin-bottom: 5px; font-weight: 800; }
+        .subtitle { color: var(--gold); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
+        .bio { color: #555; font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px; }
+
+        /* Home CTA Button */
+        .btn-cta {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(30,61,52,0.2);
+            transition: transform 0.2s;
+            margin-top: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-cta:active { transform: scale(0.98); }
 
         /* Tags */
-        .tags-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 15px; }
-        .tag { background: #f0f4f3; color: var(--primary); padding: 8px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; border: 1px solid #e0e0e0; }
+        .tag-cloud { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 10px; }
+        .tag { background: var(--primary-light); color: var(--primary); padding: 6px 12px; border-radius: 15px; font-size: 0.75rem; font-weight: 700; }
 
-        /* Cards */
-        .card {
+        /* --- Professional Profile Cards --- */
+        .section-header {
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 15px; padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .section-header i { color: var(--gold); font-size: 1.2rem; }
+        .section-header h2 { font-size: 1.1rem; color: var(--primary); margin: 0; }
+
+        .pro-card {
             background: white;
-            border-radius: 12px;
-            padding: 25px;
+            border: 1px solid #eee;
+            border-radius: 16px;
+            padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            border-left: 4px solid var(--gold);
-            transition: transform 0.2s;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
         }
-        .card:hover { transform: translateY(-2px); }
 
-        .card h3 { color: var(--primary); margin-bottom: 15px; font-size: 1.2rem; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .edu-item { margin-bottom: 5px; }
+        .edu-school { font-weight: 700; color: var(--text-dark); display: block; font-size: 1rem; }
+        .edu-degree { color: var(--gold); font-size: 0.9rem; font-weight: 600; }
+        .edu-desc { color: #666; font-size: 0.85rem; margin-top: 8px; line-height: 1.5; }
 
-        /* Contact Grid */
-        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        .mini-card {
-            background: #fdfdfd; padding: 20px; border-radius: 10px;
+        /* Ticked List */
+        .tick-list { list-style: none; }
+        .tick-list li {
+            display: flex; align-items: flex-start; gap: 12px;
+            margin-bottom: 12px; color: var(--text-dark); font-size: 0.95rem;
+        }
+        .tick-list li:last-child { margin-bottom: 0; }
+        .tick-list i { color: var(--gold); margin-top: 4px; }
+
+        /* Cert Thumbnail */
+        .cert-thumb {
+            width: 100%; height: 180px;
+            background-image: url('https://i.ibb.co/zVKVfXn6/Whats-App-Image-2025-12-16-at-3-53-29-PM.jpg');
+            background-size: cover; background-position: center;
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+            border: 1px solid #eee;
+        }
+        .cert-overlay {
+            position: absolute; inset: 0;
+            background: rgba(0,0,0,0.3);
+            display: flex; justify-content: center; align-items: center;
+            color: white; font-weight: bold; font-size: 0.9rem;
+            opacity: 0; transition: opacity 0.2s;
+        }
+        .cert-thumb:hover .cert-overlay { opacity: 1; }
+
+        /* Contact Page */
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .contact-btn-box {
+            background: #fafafa; border: 1px solid #eee;
+            padding: 15px; border-radius: 12px;
             text-align: center; text-decoration: none; color: inherit;
-            border: 1px solid #eee; transition: 0.2s;
+            transition: 0.2s;
         }
-        .mini-card:hover { border-color: var(--gold); background: #fffcf5; }
-        .mini-card i { font-size: 1.5rem; color: var(--gold); margin-bottom: 8px; display: block; }
-        
-        /* Form */
-        .contact-form input, .contact-form textarea {
-            width: 100%; padding: 15px; margin-bottom: 15px;
-            border: 1px solid #ddd; border-radius: 8px; font-family: inherit; background: #fafafa;
-        }
-        .contact-form button {
-            width: 100%; padding: 15px; background: var(--primary); color: white;
-            border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s;
-        }
-        .contact-form button:hover { background: var(--gold); }
+        .contact-btn-box:active { background: #f0f0f0; border-color: var(--gold); }
+        .contact-btn-box i { font-size: 1.4rem; color: var(--gold); display: block; margin-bottom: 8px; }
+        .contact-btn-box span { font-size: 0.8rem; font-weight: 700; color: var(--text-dark); }
 
-        /* --- Bottom Nav --- */
+        .form-box input, .form-box textarea {
+            width: 100%; padding: 12px; margin-bottom: 10px;
+            border: 1px solid #ddd; border-radius: 8px;
+            background: #fafafa; font-family: inherit; font-size: 0.9rem;
+        }
+        .form-box button {
+            width: 100%; padding: 12px; background: var(--primary);
+            color: white; border: none; border-radius: 8px;
+            font-weight: 700; cursor: pointer;
+        }
+
+        /* --- Footer Nav --- */
         .bottom-nav {
-            height: 70px;
+            flex-shrink: 0;
+            height: 65px;
             background: white;
-            border-top: 1px solid #eee;
+            border-top: 1px solid #f0f0f0;
             display: flex;
             justify-content: space-around;
             align-items: center;
         }
+
         .nav-item {
-            background: none; border: none; color: #aaa;
-            font-size: 1.3rem; cursor: pointer;
+            background: none; border: none; color: #b0bec5;
+            font-size: 1.2rem; cursor: pointer;
             display: flex; flex-direction: column; align-items: center; gap: 4px;
-            padding: 10px 20px; transition: 0.3s;
+            padding: 10px; width: 100%;
+            transition: color 0.2s;
         }
-        .nav-item span { font-size: 0.7rem; font-weight: bold; }
-        .nav-item.active { color: var(--primary); transform: translateY(-3px); }
+        .nav-item span { font-size: 0.65rem; font-weight: 700; }
+        .nav-item.active { color: var(--primary); }
 
-        /* Visibility */
-        .page-section { display: none; opacity: 0; transform: translateY(10px); transition: opacity 0.4s ease, transform 0.4s ease; }
-        .page-section.active { display: block; opacity: 1; transform: translateY(0); }
+        /* Loader (Only for Language Switch) */
+        .loader {
+            position: absolute; inset: 0; background: white; z-index: 50;
+            display: none; justify-content: center; align-items: center;
+        }
+        .loader.active { display: flex; }
+        .spinner { width: 30px; height: 30px; border: 3px solid #eee; border-top: 3px solid var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* RTL */
+        /* Visibility classes */
+        .page { display: none; animation: fadeIn 0.3s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* RTL Logic */
         [dir="rtl"] { text-align: right; }
         [dir="rtl"] .text-center { text-align: center; }
-        [dir="rtl"] .card { border-left: none; border-right: 4px solid var(--gold); }
-        [dir="rtl"] h1, [dir="rtl"] p, [dir="rtl"] h3, [dir="rtl"] .brand { font-family: 'Amiri', serif; }
-        [dir="rtl"].urdu-font { font-family: 'Noto Nastaliq Urdu', serif; }
-        [dir="rtl"].urdu-font h1, [dir="rtl"].urdu-font .brand { line-height: 1.8; }
-        [dir="rtl"].urdu-font p { line-height: 2.2; }
-
-        @media (max-width: 600px) {
-            body { padding: 0; align-items: flex-start; }
-            .app-frame { max-width: 100%; height: 100vh; border-radius: 0; border: none; outline: none; }
-            .contact-grid { grid-template-columns: 1fr; }
-        }
+        [dir="rtl"] h1, [dir="rtl"] p, [dir="rtl"] h2, [dir="rtl"] span, [dir="rtl"] button { font-family: 'Amiri', serif; }
+        [dir="rtl"].urdu-font h1, [dir="rtl"].urdu-font p, [dir="rtl"].urdu-font span { font-family: 'Noto Nastaliq Urdu', serif; line-height: 2; }
+        
+        /* Fix list icons in RTL */
+        [dir="rtl"] .tick-list li i { margin-left: 10px; margin-right: 0; }
+        [dir="rtl"] .section-header { flex-direction: row; } 
     </style>
 </head>
 <body id="appBody" dir="ltr">
 
     <div class="app-frame">
         
-        <div class="loader-overlay" id="loader">
+        <div class="loader" id="langLoader">
             <div class="spinner"></div>
-            <div class="loading-text">Loading...</div>
         </div>
 
-        <div class="lang-bar">
-            <div class="brand" id="headerBrand" data-key="name">Syed Sana</div>
-            <div class="lang-options">
-                <button class="lang-btn active" id="btn-en" onclick="triggerLoad('en')">
-                    <img src="https://flagcdn.com/w80/us.png" alt="English">
-                </button>
-                <button class="lang-btn" id="btn-ar" onclick="triggerLoad('ar')">
-                    <img src="https://flagcdn.com/w80/sa.png" alt="Arabic">
-                </button>
-                <button class="lang-btn" id="btn-ur" onclick="triggerLoad('ur')">
-                    <img src="https://flagcdn.com/w80/pk.png" alt="Urdu">
-                </button>
+        <div class="header-bar">
+            <div class="brand-name" data-key="name">Syed Sana</div>
+            <div class="lang-group">
+                <button class="lang-badge active" id="btn-en" onclick="triggerLangLoad('en')">EN</button>
+                <button class="lang-badge ar" id="btn-ar" onclick="triggerLangLoad('ar')">ع</button>
+                <button class="lang-badge ur" id="btn-ur" onclick="triggerLangLoad('ur')">اردو</button>
             </div>
         </div>
 
-        <div class="scroll-container" id="scrollContainer">
+        <div class="scroll-view" id="mainScroll">
             
-            <div class="cover-area">
+            <div class="cover-img">
                 <div class="cover-overlay"></div>
             </div>
 
-            <div class="content-padding">
+            <div class="container">
                 
-                <div id="home" class="page-section active">
-                    <div class="profile-pic-wrapper">
-                        <img src="https://img.freepik.com/premium-vector/vector-muslim-woman-avatar-female-vector-arab-people-icon-saudi-character-minimalistic-simple-flat_615232-2336.jpg" alt="Syed Sana" class="profile-img">
+                <div id="home" class="page active">
+                    <div class="profile-wrapper">
+                        <img src="https://img.freepik.com/premium-vector/vector-muslim-woman-avatar-female-vector-arab-people-icon-saudi-character-minimalistic-simple-flat_615232-2336.jpg" alt="Profile" class="profile-img">
                     </div>
 
                     <div class="text-center">
                         <h1 data-key="name">Syed Sana</h1>
-                        <div class="role-text" data-key="role">Professional Educator</div>
-                        <p class="bio-text" data-key="bio">Darse Nizami Graduate specializing in Arabic Grammar, Tajweed, and Islamic Jurisprudence. Passionate about teaching the intricacies of the Quran to students worldwide.</p>
-                    
-                        <div class="tags-container">
+                        <div class="subtitle" data-key="role">Professional Educator</div>
+                        
+                        <div class="tag-cloud">
                             <span class="tag" data-key="tag1">Darse Nizami</span>
                             <span class="tag" data-key="tag2">Arabic Expert</span>
                             <span class="tag" data-key="tag3">Quran Teacher</span>
                         </div>
+
+                        <p class="bio" style="margin-top: 20px;" data-key="bio">
+                            Darse Nizami Graduate specializing in Arabic Grammar, Tajweed, and Islamic Jurisprudence. Dedicated to spreading authentic knowledge.
+                        </p>
+
+                        <button class="btn-cta" onclick="switchTab('profile', document.getElementById('nav-profile'))">
+                            <span data-key="btn_view_profile">View Full Profile</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
                     </div>
                 </div>
 
-                <div id="profile" class="page-section">
-                    <h2 class="text-center" style="color:var(--primary); margin-bottom:25px;" data-key="menu_profile">Profile Details</h2>
+                <div id="profile" class="page">
+                    <h2 class="text-center" style="margin-bottom: 20px; color: var(--primary); font-size: 1.3rem;" data-key="menu_profile">Profile Details</h2>
 
-                    <div class="card">
-                        <h3 data-key="edu_title">Education</h3>
-                        <div style="display:flex; align-items:start; gap:10px;">
-                            <i class="fas fa-university" style="color:var(--gold); margin-top:5px;"></i>
-                            <div>
-                                <strong style="color: #333; display:block; margin-bottom:5px;" data-key="edu_school">Khatijatul Kubra Mardan, KPK</strong>
-                                <span style="font-size:0.9rem; color:#777;" data-key="edu_course">6 Years Darse Nizami Course</span>
-                            </div>
+                    <div class="pro-card">
+                        <div class="section-header">
+                            <i class="fas fa-graduation-cap"></i>
+                            <h2 data-key="edu_title">Education</h2>
                         </div>
-                        <p style="font-size:0.9rem; margin-top:15px; color:#666;" data-key="edu_desc">Completed comprehensive studies in Nahw, Sarf, Fiqh, and Tafseer.</p>
+                        <div class="edu-item">
+                            <span class="edu-school" data-key="edu_school">Khatijatul Kubra Mardan</span>
+                            <span class="edu-degree" data-key="edu_course">6 Years Darse Nizami Course</span>
+                            <p class="edu-desc" data-key="edu_desc">Specialized in Nahw, Sarf, Fiqh, and Tafseer.</p>
+                        </div>
                     </div>
 
-                    <div class="card">
-                        <h3 data-key="serv_title">Services</h3>
-                        <ul style="list-style: none; color:#555; line-height:2;">
-                            <li><i class="fas fa-check" style="color:var(--gold); margin-right:10px; margin-left:10px;"></i> <span data-key="serv1">Teaching Quran with Tajweed</span></li>
-                            <li><i class="fas fa-check" style="color:var(--gold); margin-right:10px; margin-left:10px;"></i> <span data-key="serv2">Arabic Language & Grammar</span></li>
-                            <li><i class="fas fa-check" style="color:var(--gold); margin-right:10px; margin-left:10px;"></i> <span data-key="serv3">Islamic Laws Consultation</span></li>
-                            <li><i class="fas fa-check" style="color:var(--gold); margin-right:10px; margin-left:10px;"></i> <span data-key="serv4">Private Tuition & Mentoring</span></li>
+                    <div class="pro-card">
+                        <div class="section-header">
+                            <i class="fas fa-briefcase"></i>
+                            <h2 data-key="serv_title">Services</h2>
+                        </div>
+                        <ul class="tick-list">
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                <span data-key="serv1">Teaching Quran with Tajweed</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                <span data-key="serv2">Arabic Language & Grammar</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                <span data-key="serv3">Islamic Laws Consultation</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                <span data-key="serv4">Private Tuition & Mentoring</span>
+                            </li>
                         </ul>
                     </div>
 
-                    <div class="text-center" style="margin-bottom: 20px;">
-                        <h3 style="font-size:1rem; margin-bottom:15px; color:#999;" data-key="cert_label">Certificate Preview</h3>
-                        <img src="https://i.ibb.co/zVKVfXn6/Whats-App-Image-2025-12-16-at-3-53-29-PM.jpg" onclick="window.open(this.src)" style="width:100%; max-width:400px; border-radius:8px; border:4px solid #fff; box-shadow:0 5px 15px rgba(0,0,0,0.1); cursor:pointer; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'" alt="Certificate">
+                    <div class="pro-card">
+                        <div class="section-header">
+                            <i class="fas fa-certificate"></i>
+                            <h2 data-key="cert_label">Certification</h2>
+                        </div>
+                        <div class="cert-thumb" onclick="window.open('https://i.ibb.co/zVKVfXn6/Whats-App-Image-2025-12-16-at-3-53-29-PM.jpg')">
+                            <div class="cert-overlay">
+                                <i class="fas fa-expand-alt" style="margin-right: 5px;"></i> View Full
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div id="contact" class="page-section">
-                    <h2 class="text-center" style="color:var(--primary); margin-bottom:25px;" data-key="menu_contact">Contact Me</h2>
+                <div id="contact" class="page">
+                    <h2 class="text-center" style="margin-bottom: 20px; color: var(--primary); font-size: 1.3rem;" data-key="menu_contact">Contact Me</h2>
 
                     <div class="contact-grid">
-                        <a href="https://wa.me/923101457770" class="mini-card">
+                        <a href="https://wa.me/923101457770" class="contact-btn-box">
                             <i class="fab fa-whatsapp"></i>
                             <span>WhatsApp</span>
                         </a>
-                        <a href="tel:+923101457770" class="mini-card">
-                            <i class="fas fa-phone"></i>
+                        <a href="tel:+923101457770" class="contact-btn-box">
+                            <i class="fas fa-phone-alt"></i>
                             <span data-key="call_btn">Call Now</span>
                         </a>
                     </div>
-                    
-                    <div class="mini-card" style="width:100%; margin-bottom:20px; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                        <i class="fas fa-map-marker-alt" style="margin-bottom:0;"></i>
-                        <span>618 A Eden City, Lahore</span>
+
+                    <div class="pro-card form-box">
+                        <h3 style="margin-bottom: 15px; color: var(--primary); font-size: 1rem;" data-key="form_title">Send Message</h3>
+                        <form action="mailto:springdandelion004@gmail.com" method="post" enctype="text/plain">
+                            <input type="text" name="name" placeholder="Name..." required>
+                            <input type="text" name="contact" placeholder="Email/Phone..." required>
+                            <textarea name="message" rows="3" placeholder="Write your message..." required></textarea>
+                            <button type="submit" data-key="form_btn">Send Email</button>
+                        </form>
                     </div>
 
-                    <div class="card" style="border-left:none; border-top: 4px solid var(--gold);">
-                        <h3 data-key="form_title">Send an Email</h3>
-                        <form action="mailto:springdandelion004@gmail.com" method="post" enctype="text/plain" class="contact-form">
-                            <input type="text" name="name" placeholder="Name / الاسم" required>
-                            <input type="text" name="contact" placeholder="Phone or Email / رقم الهاتف" required>
-                            <textarea name="message" rows="4" placeholder="Message / رسالة" required></textarea>
-                            <button type="submit" data-key="form_btn">Send Message</button>
-                        </form>
+                    <div style="text-align: center; color: #999; font-size: 0.8rem; margin-top: 20px;">
+                        <i class="fas fa-map-marker-alt"></i> 618 A Eden City, Lahore
                     </div>
                 </div>
 
@@ -387,15 +438,15 @@
         </div>
 
         <nav class="bottom-nav">
-            <button class="nav-item active" onclick="switchWithLoad('home', this)">
+            <button class="nav-item active" id="nav-home" onclick="switchTab('home', this)">
                 <i class="fas fa-home"></i>
                 <span data-key="menu_home">Home</span>
             </button>
-            <button class="nav-item" onclick="switchWithLoad('profile', this)">
+            <button class="nav-item" id="nav-profile" onclick="switchTab('profile', this)">
                 <i class="fas fa-user-graduate"></i>
                 <span data-key="menu_profile">Profile</span>
             </button>
-            <button class="nav-item" onclick="switchWithLoad('contact', this)">
+            <button class="nav-item" id="nav-contact" onclick="switchTab('contact', this)">
                 <i class="fas fa-envelope"></i>
                 <span data-key="menu_contact">Contact</span>
             </button>
@@ -404,117 +455,101 @@
     </div>
 
     <script>
-        // --- Translations ---
+        /* --- Data & Translations --- */
         const translations = {
             en: {
-                name: "Syed Sana",
-                role: "Professional Educator",
-                bio: "Darse Nizami Graduate specializing in Arabic Grammar, Tajweed, and Islamic Jurisprudence. Passionate about teaching the intricacies of the Quran to students worldwide.",
+                name: "Syed Sana", role: "Professional Educator",
+                bio: "Darse Nizami Graduate specializing in Arabic Grammar, Tajweed, and Islamic Jurisprudence. Dedicated to spreading authentic knowledge.",
                 tag1: "Darse Nizami", tag2: "Arabic Expert", tag3: "Quran Teacher",
+                btn_view_profile: "View Full Profile",
                 menu_home: "Home", menu_profile: "Profile", menu_contact: "Contact",
-                edu_title: "Education", edu_school: "Khatijatul Kubra Mardan, KPK", edu_course: "6 Years Darse Nizami Course", edu_desc: "Completed comprehensive studies in Nahw, Sarf, Fiqh, and Tafseer.",
+                edu_title: "Education", edu_school: "Khatijatul Kubra Mardan, KPK", edu_course: "6 Years Darse Nizami Course", edu_desc: "Specialized in Nahw, Sarf, Fiqh, and Tafseer.",
                 serv_title: "Services", serv1: "Teaching Quran with Tajweed", serv2: "Arabic Language & Grammar", serv3: "Islamic Laws Consultation", serv4: "Private Tuition & Mentoring",
-                cert_label: "Certificate Preview", form_title: "Send an Email", form_btn: "Send Message", call_btn: "Call Now", load_txt: "Loading..."
+                cert_label: "Certification", form_title: "Send Message", form_btn: "Send Email", call_btn: "Call Now"
             },
             ar: {
-                name: "سيدة سناء",
-                role: "معلمة محترفة",
-                bio: "خريجة درس نظامي متخصصة في النحو العربي والتجويد والفقه الإسلامي. شغوفة بتعليم دقائق القرآن للطلاب في جميع أنحاء العالم.",
+                name: "سيدة سناء", role: "معلمة محترفة",
+                bio: "خريجة درس نظامي متخصصة في النحو العربي والتجويد والفقه الإسلامي. مكرسة لنشر المعرفة الصحيحة.",
                 tag1: "درس نظامي", tag2: "خبيرة لغة عربية", tag3: "معلمة قرآن",
+                btn_view_profile: "عرض الملف الشخصي",
                 menu_home: "الرئيسية", menu_profile: "الملف الشخصي", menu_contact: "اتصل بي",
-                edu_title: "التعليم", edu_school: "خديجة الكبرى مردان، خيبر بختونخوا", edu_course: "دورة درس نظامي 6 سنوات", edu_desc: "أكملت دراسات شاملة في النحو والصرف والفقه والتفسير.",
+                edu_title: "التعليم", edu_school: "خديجة الكبرى مردان، خيبر بختونخوا", edu_course: "دورة درس نظامي 6 سنوات", edu_desc: "متخصصة في النحو والصرف والفقه والتفسير.",
                 serv_title: "الخدمات", serv1: "تعليم القرآن مع التجويد", serv2: "اللغة العربية والقواعد", serv3: "استشارات القوانين الإسلامية", serv4: "دروس خصوصية وتوجيه",
-                cert_label: "معاينة الشهادة", form_title: "إرسال بريد إلكتروني", form_btn: "إرسال الرسالة", call_btn: "اتصل الآن", load_txt: "جاري التحميل..."
+                cert_label: "الشهادات", form_title: "إرسال رسالة", form_btn: "إرسال بريد", call_btn: "اتصل الآن"
             },
             ur: {
-                name: "سیدہ ثناء",
-                role: "پیشہ ور معلمہ",
-                bio: "درس نظامی کی گریجویٹ، عربی گرامر، تجوید اور اسلامی فقہ میں مہارت۔ دنیا بھر کے طلباء کو قرآن پاک کی باریکیاں سکھانے کا جذبہ۔",
+                name: "سیدہ ثناء", role: "پیشہ ور معلمہ",
+                bio: "درس نظامی کی گریجویٹ، عربی گرامر، تجوید اور اسلامی فقہ میں مہارت۔ مستند علم پھیلانے کے لیے پرعزم۔",
                 tag1: "درس نظامی", tag2: "عربی ماہر", tag3: "قرآن ٹیچر",
+                btn_view_profile: "مکمل پروفائل دیکھیں",
                 menu_home: "ہوم", menu_profile: "پروفائل", menu_contact: "رابطہ",
-                edu_title: "تعلیم", edu_school: "خدیجۃ الکبریٰ مردان، کے پی کے", edu_course: "6 سالہ درس نظامی کورس", edu_desc: "نحو، صرف، فقہ، اور تفسیر میں جامع تعلیم مکمل کی۔",
+                edu_title: "تعلیم", edu_school: "خدیجۃ الکبریٰ مردان، کے پی کے", edu_course: "6 سالہ درس نظامی کورس", edu_desc: "نحو، صرف، فقہ، اور تفسیر میں مہارت۔",
                 serv_title: "خدمات", serv1: "تجوید کے ساتھ قرآن کی تعلیم", serv2: "عربی زبان اور گرامر", serv3: "اسلامی قوانین (فقہ) مشاورت", serv4: "نجی ٹیوشن اور رہنمائی",
-                cert_label: "سرٹیفکیٹ کا پیش منظر", form_title: "ای میل بھیجیں", form_btn: "پیغام بھیجیں", call_btn: "کال کریں", load_txt: "لوڈ ہو رہا ہے..."
+                cert_label: "سندات", form_title: "پیغام بھیجیں", form_btn: "ای میل بھیجیں", call_btn: "کال کریں"
             }
         };
 
-        // --- Init: Check LocalStorage on Load ---
+        /* --- Initialization --- */
         document.addEventListener('DOMContentLoaded', () => {
-            const savedLang = localStorage.getItem('selectedLang') || 'en';
-            setLang(savedLang);
+            const savedLang = localStorage.getItem('sana_lang') || 'en';
+            applyLang(savedLang);
         });
 
-        // --- Loader Logic ---
-        function showLoader(callback) {
-            const loader = document.getElementById('loader');
+        /* --- Language Switching (With Loader) --- */
+        function triggerLangLoad(lang) {
+            localStorage.setItem('sana_lang', lang);
+            const loader = document.getElementById('langLoader');
+            
+            // Show loader only for language switch
             loader.classList.add('active');
             
-            // Wait 600ms to fake loading
             setTimeout(() => {
-                callback();
-                setTimeout(() => {
-                    loader.classList.remove('active');
-                }, 200);
-            }, 600);
+                applyLang(lang);
+                setTimeout(() => { loader.classList.remove('active'); }, 200);
+            }, 500);
         }
 
-        // --- Language Switch ---
-        function triggerLoad(lang) {
-            // Save to LocalStorage
-            localStorage.setItem('selectedLang', lang);
-            
-            showLoader(() => {
-                setLang(lang);
-            });
-        }
+        function applyLang(lang) {
+            // Update Badges
+            document.querySelectorAll('.lang-badge').forEach(b => b.classList.remove('active'));
+            const btn = document.getElementById(`btn-${lang}`);
+            if(btn) btn.classList.add('active');
 
-        function setLang(lang) {
-            // 1. Update Flag Buttons UI
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            const activeBtn = document.getElementById(`btn-${lang}`);
-            if(activeBtn) activeBtn.classList.add('active');
-
-            // 2. Handle Direction and Font Family
+            // Direction & Fonts
             const body = document.getElementById('appBody');
-            if (lang === 'ar' || lang === 'ur') {
+            if(lang === 'ar' || lang === 'ur') {
                 body.setAttribute('dir', 'rtl');
-                if(lang === 'ur') body.classList.add('urdu-font');
-                else body.classList.remove('urdu-font');
+                if(lang === 'ur') body.classList.add('urdu-font'); else body.classList.remove('urdu-font');
             } else {
                 body.setAttribute('dir', 'ltr');
                 body.classList.remove('urdu-font');
             }
 
-            // 3. Update All Text Content (Including Header Brand)
-            const elements = document.querySelectorAll('[data-key]');
-            elements.forEach(el => {
+            // Text Update
+            document.querySelectorAll('[data-key]').forEach(el => {
                 const key = el.getAttribute('data-key');
-                if (translations[lang][key]) {
-                    el.innerText = translations[lang][key];
-                }
+                if(translations[lang][key]) el.innerText = translations[lang][key];
             });
-            
-            // 4. Update Loading Text
-            const loadingTxt = document.querySelector('.loading-text');
-            if(loadingTxt) loadingTxt.innerText = translations[lang]['load_txt'];
         }
 
-        // --- Tab Switch ---
-        function switchWithLoad(tabId, btn) {
-            if (!btn.classList.contains('active')) {
-                showLoader(() => {
-                    // Update Nav Icons
-                    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-                    btn.classList.add('active');
-
-                    // Update Page Visibility
-                    document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
-                    document.getElementById(tabId).classList.add('active');
-
-                    // Reset Scroll
-                    document.getElementById('scrollContainer').scrollTop = 0;
-                });
+        /* --- Tab Switching (Instant - No Loader) --- */
+        function switchTab(tabId, navBtn) {
+            // 1. Update Navigation UI
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            if(navBtn) {
+                navBtn.classList.add('active');
+            } else {
+                // If triggered by non-nav button (like CTA), find the corresponding nav button
+                const targetNav = document.getElementById('nav-' + tabId);
+                if(targetNav) targetNav.classList.add('active');
             }
+
+            // 2. Update Page Content
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+
+            // 3. Reset Scroll
+            document.getElementById('mainScroll').scrollTop = 0;
         }
 
     </script>
